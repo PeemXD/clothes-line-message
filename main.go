@@ -23,11 +23,11 @@ import (
 )
 
 func main() {
-	client := &http.Client{}
+	log.Println("Open!")
 	bot, err := linebot.New(
 		"8083397e59c525a2866e74c0bae57099",
 		"wbLzI5LqL1vKlx2ywlxjP2Q/rzRwIGynkQi/mMFwUrJ2iE54XD9qIpEmmKWYHIH/3pG+CTwFMp+sW8WUTpKt6DdZwdaWfIkpIn/IY1Ux5uClpa/NMBntr3RhTktPBfC330ez3K2MGvhZn2N+v+3D6gdB04t89/1O/w1cDnyilFU=",
-		linebot.WithHTTPClient(client))
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -60,6 +60,9 @@ func main() {
 			}
 		}
 	})
+	// http.HandleFunc("/callback", func(w http.ResponseWriter, req *http.Request) {
+
+	// })
 	// This is just sample code.
 	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
 	if err := http.ListenAndServe(":"+"8080", nil); err != nil {
