@@ -23,10 +23,11 @@ import (
 )
 
 func main() {
+	client := &http.Client{}
 	bot, err := linebot.New(
 		"8083397e59c525a2866e74c0bae57099",
 		"wbLzI5LqL1vKlx2ywlxjP2Q/rzRwIGynkQi/mMFwUrJ2iE54XD9qIpEmmKWYHIH/3pG+CTwFMp+sW8WUTpKt6DdZwdaWfIkpIn/IY1Ux5uClpa/NMBntr3RhTktPBfC330ez3K2MGvhZn2N+v+3D6gdB04t89/1O/w1cDnyilFU=",
-	)
+		linebot.WithHTTPClient(client))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,7 +47,7 @@ func main() {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("left clicked")).Do(); err != nil {
 						log.Print(err)
 					}
 				case *linebot.StickerMessage:
