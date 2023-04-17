@@ -15,6 +15,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -65,7 +66,24 @@ func main() {
 	// })
 	// This is just sample code.
 	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
-	if err := http.ListenAndServe(":"+"8080", nil); err != nil {
+	// if err := http.ListenAndServe(":"+"808", nil); err != nil {
+	// 	log.Fatal(err)
+	// }
+	// Set up TLS configuration
+	cert, err := tls.LoadX509KeyPair("/cert.pem", "/key.pem")
+	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Set up HTTPS server
+	server := &http.Server{
+		Addr:    ":443",
+		Handler: nil,
+		TLSConfig: &tls.Config{
+			Certificates: []tls.Certificate{cert},
+		},
+	}
+
+	log.Fatal(server.ListenAndServeTLS("", ""))
+
 }
