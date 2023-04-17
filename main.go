@@ -15,8 +15,6 @@
 package main
 
 import (
-	"crypto/tls"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -26,8 +24,8 @@ import (
 func main() {
 	log.Println("Open!")
 	bot, err := linebot.New(
-		"8083397e59c525a2866e74c0bae57099",
-		"wbLzI5LqL1vKlx2ywlxjP2Q/rzRwIGynkQi/mMFwUrJ2iE54XD9qIpEmmKWYHIH/3pG+CTwFMp+sW8WUTpKt6DdZwdaWfIkpIn/IY1Ux5uClpa/NMBntr3RhTktPBfC330ez3K2MGvhZn2N+v+3D6gdB04t89/1O/w1cDnyilFU=",
+		"22bad19b24bc87abc675aabed2ad0e74",
+		"OuFHr2lU/8wFp/RVDLKaNQYNjbJB1T7FLZFvT1I3f6pmQ171lJ+c1A4PHgq+OdXc3pG+CTwFMp+sW8WUTpKt6DdZwdaWfIkpIn/IY1Ux5uAWNebTeAGH+ahbWxiKidFD7NOmpifb4Apoki2IOL4IMwdB04t89/1O/w1cDnyilFU=",
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -48,13 +46,13 @@ func main() {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("left clicked")).Do(); err != nil {
-						log.Print(err)
+					if message.Text == "swap" {
+						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("My token\n80")).Do(); err != nil {
+							log.Print(err)
+						}
 					}
-				case *linebot.StickerMessage:
-					replyMessage := fmt.Sprintf(
-						"sticker id is %s, stickerResourceType is %s", message.StickerID, message.StickerResourceType)
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(replyMessage)).Do(); err != nil {
+				default:
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Eiei")).Do(); err != nil {
 						log.Print(err)
 					}
 				}
@@ -66,24 +64,7 @@ func main() {
 	// })
 	// This is just sample code.
 	// For actual use, you must support HTTPS by using `ListenAndServeTLS`, a reverse proxy or something else.
-	// if err := http.ListenAndServe(":"+"808", nil); err != nil {
-	// 	log.Fatal(err)
-	// }
-	// Set up TLS configuration
-	cert, err := tls.LoadX509KeyPair("/cert.pem", "/key.pem")
-	if err != nil {
+	if err := http.ListenAndServe(":"+"8080", nil); err != nil {
 		log.Fatal(err)
 	}
-
-	// Set up HTTPS server
-	server := &http.Server{
-		Addr:    ":443",
-		Handler: nil,
-		TLSConfig: &tls.Config{
-			Certificates: []tls.Certificate{cert},
-		},
-	}
-
-	log.Fatal(server.ListenAndServeTLS("", ""))
-
 }
